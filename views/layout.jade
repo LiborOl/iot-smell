@@ -1,5 +1,5 @@
 doctype html
-html(style='overflow-y:scroll', manifest="/ibn.appcache")
+html(style='overflow-y:scroll')
     block vars
         - var activeTab = ''
     block customVars
@@ -11,6 +11,7 @@ html(style='overflow-y:scroll', manifest="/ibn.appcache")
 
         link(rel='shortcut icon' type='image/png' href='/images/bn.png')
         link(rel='stylesheet', href='/scripts/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
         script(src='/scripts/jquery.js')
         script(src='/scripts/js/bootstrap.min.js')
         script(src='/scripts/angular.min.js')

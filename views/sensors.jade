@@ -6,74 +6,19 @@ block vars
 
 block content
     div(data-ng-controller='sensors')
-        div(data-ng-if='!dataLoaded && !errorMessage', class='panel panel-group')
-            h1 Loading data...
-        div(data-ng-if='!!errorMessage' ng-cloak)
-            div(class='alert alert-danger')
-                strong ERROR:
-                | {{' ' + errorMessage}}
-        div(data-ng-if='dataLoaded && !errorMessage' class='panel panel-group' ng-cloak)
-            div(style='cursor:default', class='panel panel-default')
-                div(class='panel-heading', data-toggle="collapse", data-target="#groupsFilter")
-                    h4
-                        b Filter Groups
-                div(id='groupsFilter', class='panel-collapse collapse in table-responsive', aria-expanded='true')
-                    div(class='panel-body')
-                        label(class='checkbox-inline', data-ng-repeat='group in groups')
-                            input(type='checkbox', data-ng-model='show[group.name]', data-ng-click='groupClicked(group)')
-                            | {{group.title}}
+        div#map
+        script.
+            function initMapXX() {
+                var uluru = {lat: -25.363, lng: 131.044};
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 4,
+                center: uluru
+            });
+            var marker = new google.maps.Marker({
+                position: uluru,
+                map: map
+            });
+                console.log('Map initialized')
+            }
 
-            div(style='cursor:default', class='panel panel-default')
-                div(class='panel-heading', data-toggle="collapse", data-target="#projectsFilter2")
-                    h4
-                        b Filter Projects
-                div(id='projectsFilter2', class='panel-collapse collapse in table-responsive', aria-expanded='true')
-                    table(class='table table-striped table-hover table-condensed')
-                        tbody
-                            tr(style='cursor:default', data-ng-repeat='project in projects', data-ng-click='projectClicked(project)')
-                                td
-                                    input(type='checkbox', class='checkbox', data-ng-checked='project.show')
-                                td {{project.projectId}}
-                                td {{project.description}}
-            br
-            +sensorsList('items')
-            br
-            button(type='button', class='btn btn-link pull-right', data-toggle='modal', data-target='#selectedSensors', title='Show Selected Sensors', ng-disabled='selectedSensors.length === 0') Show Selected
-            button(type='button', class='btn btn-link', ng-click='refresh(item)', title='Reload Data') Reload
-
-        div(class='modal fade', id='nearbyItems', role='dialog')
-            div(class='modal-dialog modal-lg')
-                div(class='modal-content')
-                    div(class='modal-header')
-                        button(type='button', class='close', data-dismiss='modal') &times
-                        h3 Nearby Sensors
-                        p Sensors receiving signal from the same GateWay(s).
-                    div(class='modal-body')
-                        +sensorsList('nearbyItems', true)
-                        div(class='modal-footer')
-                            button(type='button', class='btn btn-default', data-dismiss='modal') Close
-
-
-        div(class='modal fade', id='selectedSensors', role='dialog')
-            div(class='modal-dialog modal-lg')
-                div(class='modal-content')
-                    div(class='modal-header')
-                        button(type='button', class='close', data-dismiss='modal') &times
-                        h3 Selected Sensors
-                        p All selected sensors in visible groups and projects.
-                    div(class='modal-body table-responsive', ng-show='selectedSensors.length > 0')
-                        +sensorsTable('selectedSensors', true, null, true)
-                    div(class='modal-body', ng-show='selectedSensors.length === 0')
-                        h4 No sensor is selected.
-                    div(class='modal-footer')
-                        block selectedSensorsFooter
-                        button(type='button', class='btn btn-default', data-dismiss='modal') Close
-                        button(type='button', class='btn btn-default', data-dismiss='modal', ng-click='printSelected()') Print
-
-        div(class='visible-print-block', id='printSelectedSensors', ng-if='showPrintSelectedSensors')
-            title fdakjfldsjfa
-            h3 #{appName}
-            +sensorsTable('selectedSensors', false, null, true, true)(class='small')
-            br
-            block printablePanelFooter
-
+        script(async, defer, ng-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7hQ85LSM_AQzXrUZprQkbZAaX6qJc-dQ&libraries=visualization&callback=initMap")

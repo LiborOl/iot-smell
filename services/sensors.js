@@ -171,7 +171,18 @@
         }
     }
 
+    function readSmell(callback){
+        var testData = [
+            {devEUI: '767382', lat: 49.7709579, lng: 15.8470745, val: 4.4},
+            {devEUI: '767382', lat: 49.9709579, lng: 15.8470745, val: 5.4},
+            {devEUI: '767382', lat: 49.8709579, lng: 18.2470745, val: 6.4}
+        ];
+
+        callback(testData);
+    }
+
     module.exports = {
-        readSensorsData: readSensorsData
+        readSensorsData: readSensorsData,
+        readSmell: readSmell
     };
 })();

@@ -119,7 +119,7 @@
         }
 
         return {
-            appName: 'IoT Battery Notifications',
+            appName: 'Čistý vzduch',
             groups: groups,
             sensorsSummary: sensorsSummary,
             selectedByDefault: selectedByDefault,
