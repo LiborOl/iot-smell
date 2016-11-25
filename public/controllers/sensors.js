@@ -6,10 +6,19 @@
 
         function init() {
 
+            setDataLoaded = setDataLoadedNG;
+
+        }
+
+        function setDataLoadedNG() {
+            $scope.dataLoaded = true;
+            $scope.$apply();
         }
 
     }])
 })();
+
+var setDataLoaded;
 
 
 function getCircle(quality) {
@@ -74,6 +83,8 @@ function initMap() {
             }
         });
 
+        console.log('loading done');
+        setDataLoaded();
     }
 
     function getTitle(dato) {
