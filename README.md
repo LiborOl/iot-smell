@@ -1,5 +1,4 @@
-# IoT Battery Notifications
-Prototype of application for Czech IoT Summer Jam 2016 competition.
+# IoT Smell
 
 ## requirements
 Node.js installed
