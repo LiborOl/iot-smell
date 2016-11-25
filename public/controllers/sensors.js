@@ -69,9 +69,9 @@ function initMap() {
                     '<dt>quality:</dt>' +
                     '<dd>' + (dato.quality) + '</dd>' +
                     '<dt>Temperature:</dt>' +
-                    '<dd>' + (dato.temperature / 10) + '</dd>' +
+                    '<dd>' + (dato.temperature / 10) + '°C</dd>' +
                     '<dt>Humidity:</dt>' +
-                    '<dd>' + (dato.humidity / 10) + '</dd>' +
+                    '<dd>' + (dato.humidity / 10) + '%</dd>' +
                     '</dl>'
                 });
 
@@ -94,7 +94,7 @@ function initMap() {
     function getTitle(dato) {
         return '' +
             'devEUI: ' + dato.devEUI + '\n' +
-            'Cistota: ' + (dato.quality / 1000)
+            'Cistota: ' + dato.quality
     }
 
     function qualityToMagnitude(quality) {
