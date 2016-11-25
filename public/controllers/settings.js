@@ -9,8 +9,9 @@
             $scope.generalSettings = batteryService.initGeneralSettings();
         }
 
-        $scope.selectItem = function (item) {
+        $scope.selectItem = function (key, item) {
             $scope.selectedItem = $.extend({}, item);
+            $scope.selectedItem.key = key;
         };
 
         $scope.saveGeneral = function () {
@@ -20,8 +21,12 @@
                 })
         };
 
-        $scope.saveSensor = function () {
-            $http.put('api/settings/sensors', $scope.selectedItem)
+        $scope.saveSettings = function () {
+            var data = {};
+            data[$scope.selectedItem.key] = {};
+            data[$scope.selectedItem.key].latitude = parseFloat($scope.selectedItem.latitude);
+            data[$scope.selectedItem.key].longitude = parseFloat($scope.selectedItem.longitude);
+            $http.post('api/aq-detectors', data)
                 .success(function () {
                     getSettings();
                 })

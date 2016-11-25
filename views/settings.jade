@@ -8,6 +8,7 @@ block content
         div(class='panel panel-default')
             div(class='panel-heading')
                 h2 Air Quality Detectors
+                button(type='button', class='btn btn-link', data-toggle='modal', data-target='#change') Add
             div(class='panel-body table-responsive')
                 table(class='table table-striped')
                     thead
@@ -22,29 +23,30 @@ block content
                             td {{item.latitude}}
                             td {{item.longitude}}
                             td
-                                button(type='button', class='btn btn-link btn-xs', data-ng-click="selectItem(item)", data-toggle='modal', data-target='#changeSettings') Change
+                                button(type='button', class='btn btn-link btn-xs', data-ng-click="selectItem(key, item)", data-toggle='modal', data-target='#change') Edit
 
-        div(class='modal fade', id='changeSettings', role='dialog')
+        div(class='modal fade', id='delete', role='dialog')
+
+        div(class='modal fade', id='change', role='dialog')
             div(class='modal-dialog')
                 div(class='modal-content')
                     div(class='modal-header')
                         button(type='button', class='close', data-dismiss='modal') &times
-                        h3 Change Sensor Settings
+                        h3 Detector Settings
                     div(class='modal-body')
                         div(class='form-horizontal')
                             div(class='form-group')
-                                label(class='control-label col-xs-4', for='manufacturer') Sensor Manufacturer:
+                                label(class='control-label col-xs-4', for='eui') Detector EUI:
                                 div(class='col-xs-8')
-                                    input(type='text', class='form-control', readonly, id='manufacturer', value='{{selectedItem.manufacturer}}')
+                                    input(type='text', class='form-control', id='eui', ng-model='selectedItem.key')
                             div(class='form-group')
-                                label(class='control-label col-xs-4', for='model') Model:
+                                label(class='control-label col-xs-4', for='latitude') Latitude:
                                 div(class='col-xs-8')
-                                    input(type='text', class='form-control', readonly, id='model', value='{{selectedItem.model}}')
+                                    input(type='text', class='form-control', id='latitude', ng-model='selectedItem.latitude')
                             div(class='form-group')
-                                label(class='control-label col-xs-4', for='description') Description:
+                                label(class='control-label col-xs-4', for='longitude') Longitude:
                                 div(class='col-xs-8')
-                                    input(type='text', class='form-control', readonly, id='description', value='{{selectedItem.description}}')
-                            block sensorSettingsCustomSensorEditData
+                                    input(type='text', class='form-control', id='longitude', ng-model='selectedItem.longitude')
                     div(class='modal-footer')
-                        button(type='button', class='btn btn-primary', data-dismiss='modal', data-ng-click='saveSensor()') Save
+                        button(type='button', class='btn btn-primary', data-dismiss='modal', data-ng-click='saveSettings()') Save
                         button(type='button', class='btn btn-default', data-dismiss='modal') Close
