@@ -31,9 +31,8 @@
         getSettings();
 
         function getSettings() {
-            $http.get('/api/settings').then(function (response) {
-                $scope.items = response.data['sensors'];
-                $scope.generalSettings = batteryService.generalSettingsFromJson(response.data['general']);
+            $http.get('/api/aq-detectors').then(function (response) {
+                $scope.items = response.data;
             });
         }
     }]);

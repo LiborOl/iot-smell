@@ -1,4 +1,6 @@
 var express = require('express');
+var fs = require("fs");
+var path = require('path');
 
 var settingsData = require('../services/settings.js');
 var sensors = require('../services/sensors.js');
