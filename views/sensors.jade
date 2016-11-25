@@ -14,7 +14,7 @@ block content
             div(class='panel panel-default')
                 div(class='panel-body')
                     span
-                        h3 Worst sensors
+                        h3 The Worst Locations
                     table(class='table table-striped')
                         tr
                             th devEUI
@@ -24,8 +24,8 @@ block content
                         tr(ng-repeat='item in worst')
                             td {{item.devEUI}}
                             td {{item.quality}}
-                            td {{item.temperature}}
-                            td {{item.humidity}}
+                            td {{item.temperature / 10}}
+                            td {{item.humidity / 10}}
         script.
             function initMapXX() {
                 var uluru = {lat: -25.363, lng: 131.044};
