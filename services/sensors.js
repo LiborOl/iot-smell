@@ -54,6 +54,18 @@
             })
     }
 
+    function getPripojMeAxios(url) {
+        console.log('requesting: ' + url);
+        var settings = url;
+        if (config.proxy) {
+            settings.proxy = config.proxy;
+        }
+        return axios.get(settings)
+            .then(function (respose) {
+                console.log('axios response: ' + url);
+            })
+    }
+
     function getRecords(dataString) {
         var data = JSON.parse(dataString);
         if (data['_meta'].status === 'ERROR') {
@@ -245,8 +257,6 @@
             })
 
         function addCustomSensorData(device, message){
-            //TODO
-            console.error('!!! addCustomSensorData not implemented yet');
             var payload = message['payloadHex'];
             var quality = parseInt(payload.substr(0, 4), 16);
             console.log('Quality: ' + quality);

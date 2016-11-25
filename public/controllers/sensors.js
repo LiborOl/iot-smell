@@ -12,12 +12,12 @@
 })();
 
 
-function getCircle(magnitude) {
+function getCircle(quality) {
     return {
         path: google.maps.SymbolPath.CIRCLE,
-        fillColor: magnitude < 5 ? 'blue' : 'red',
+        fillColor: qualityToColor(quality),
         fillOpacity: .2,
-        scale: Math.pow(2, magnitude) / 2,
+        scale: 19.5,
         strokeColor: 'white',
         strokeWeight: .5
     };
@@ -41,18 +41,40 @@ function initMap() {
 
         data.forEach(function (dato) {
             if (dato.lat && dato.lng) {
-                new google.maps.Marker({
+                var marker = new google.maps.Marker({
                     position: {lat: dato.lat, lng: dato.lng},
                     map: map,
-                    icon: getCircle(qualityToMagnitude(dato.quality))
-                })
+                    icon: getCircle(dato.quality),
+                    title: getTitle(dato)
+                });
+                marker.addListener('click', function() {
+                    infowindow.open(map, marker);
+                });
             } else {
                 console.error('Unknown location for sensor devEUI: ' + dato.devEUI);
             }
         });
+
+        var infowindow = new google.maps.InfoWindow({
+            content: 'aaaaa'
+        });
+    }
+
+    function getTitle(dato) {
+        return '' +
+            'devEUI: ' + dato.devEUI + '\n' +
+            'Cistota: ' + (dato.quality / 1000)
     }
 
     function qualityToMagnitude(quality) {
         return quality / 10000;
     }
 }
+
+function qualityToColor(quality) {
+    if (quality < 150)
+        return 'blue';
+    else return 'red';
+}
+
+
