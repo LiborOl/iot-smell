@@ -203,8 +203,12 @@
 
         var project = { projectId: 'CistyVzduch'};
         var deviceUrl = getDeviceUrl(project);
+        var deviceDataString = '';
         getPripojMe(deviceUrl)
-            .on('data', function (deviceDataString) {
+            .on('data', function (newData) {
+                deviceDataString += newData;
+            })
+            .on('end', function () {
                 var devices = getRecords(deviceDataString);
                 if (devices) {
                     allMessagesCount += devices.length;
