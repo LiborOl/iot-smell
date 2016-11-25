@@ -1,0 +1,25 @@
+include ./sensorsTable
+
+mixin sensorsList(items, inDialog)
+    div(class='panel {{group.class}}', ng-show='show[group.name] && ((group|bnIsGroupVisible:#{items}:projects) || !#{inDialog || false})', ng-repeat='group in groups')
+        div(class='panel-heading')
+            h3 {{group.title}}
+            if !inDialog
+                p {{group.description}}
+        div(class='panel-body table-responsive')
+            +sensorsTable(items + '[group.name]' , inDialog, 'bnVisibleProject:projects')(ng-show='group|bnIsGroupVisible:#{items}:projects')
+            div(ng-hide='group|bnIsGroupVisible:#{items}:projects') No sensors in this section.
+
+        div(class='panel-footer', ng-show='group|bnIsGroupVisible:#{items}:projects')
+            +panelFooter(items)
+
+
+
+
+
+
+
+
+
+
+

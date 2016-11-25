@@ -1,0 +1,94 @@
+[
+  {
+    "manufacturer": "Rising HF",
+    "model": "RHF1S001",
+    "description": "Outdoor IP64 Temperature and Humidity",
+    "battery": "ER34615",
+    "voltageMin": 2.0,
+    "voltageMax": 3.7,
+    "batteryWarningLevel": 3.3,
+    "batteryAlarmLevel": 2.9
+  },
+  {
+    "manufacturer": "Adeunis RF",
+    "model": "ARF8084BA",
+    "description": "LoRaWAN Demonstrator",
+    "batteryType": "rechargeable",
+    "batteryWarningLevel": 3.0,
+    "batteryAlarmLevel": 2.4
+  },
+  {
+    "manufacturer": "Solidus Tech",
+    "model": "DTH",
+    "description": "Senzor teploty a vlhkosti",
+    "batteryType": "unknown",
+    "batteryWarningLevel": 3.1,
+    "batteryAlarmLevel": 2.5
+  },
+  {
+    "manufacturer": "Solidus Tech",
+    "model": "S0",
+    "batteryType": "unknown",
+    "description": "",
+    "batteryWarningLevel": null,
+    "batteryAlarmLevel": 2.5
+  },
+  {
+    "manufacturer": "Develict Solutions",
+    "model": "DeSense",
+    "description": "Senzor teploty a vlhkosti",
+    "battery": "LS14500",
+    "voltageMin": 2.3,
+    "voltageMax": 3.67,
+    "batteryWarningLevel": 3.1,
+    "batteryAlarmLevel": 2.7
+  },
+  {
+    "manufacturer": "Develict Solutions",
+    "model": "DeSenseLight",
+    "description": "Senzor intenzity osvětlení",
+    "battery": "LS14500",
+    "voltageMin": 2.3,
+    "voltageMax": 3.67,
+    "batteryWarningLevel": 3.1,
+    "batteryAlarmLevel": 2.7
+  },
+  {
+    "manufacturer": "Develict Solutions",
+    "model": "DeSenseSoil",
+    "description": "Senzor půdní vlhkosti",
+    "battery": "LS14500",
+    "voltageMin": 2.3,
+    "voltageMax": 3.67,
+    "batteryWarningLevel": 3.1,
+    "batteryAlarmLevel": 2.7
+  },
+  {
+    "manufacturer": "Develict Solutions",
+    "model": "DeSenseWind",
+    "description": "Senzor proudění vzduchu",
+    "battery": "LS14500",
+    "voltageMin": 2.3,
+    "voltageMax": 3.67,
+    "batteryWarningLevel": 3.1,
+    "batteryAlarmLevel": 2.7
+  },
+  {
+    "manufacturer": "Develict Solutions",
+    "model": "DeSenseNoise",
+    "description": "Senzor hluku",
+    "battery": "LS14500",
+    "voltageMin": 2.3,
+    "voltageMax": 3.67,
+    "batteryWarningLevel": 3.1,
+    "batteryAlarmLevel": 2.7
+  },
+  {
+    "manufacturer": "Logarex",
+    "model": "EL001",
+    "description": "Senzor měření spotřeby energie",
+    "batteryType": "none",
+    "batteryWarningLevel": 2.7,
+    "batteryAlarmLevel": 3.1
+  }
+]

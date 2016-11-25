@@ -1,0 +1,76 @@
+extends layout
+
+block vars
+    - var activeTab = 'settings'
+
+block content
+    div(data-ng-controller='settings', class='panel panel-group')
+        div(class='panel panel-default')
+            div(class='panel-heading')
+                h2 General Settings
+            div(class='panel-body')
+                dl(class='dl-horizontal')
+                    block generalSettings
+            div(class='panel-footer')
+                button(type='button', class='btn btn-link', data-toggle='modal', data-target='#changeGeneralSettings') Edit
+
+        div(class='panel panel-default')
+            div(class='panel-heading')
+                h2 Sensor Settings
+            div(class='panel-body table-responsive')
+                table(class='table table-striped')
+                    thead
+                        tr
+                            th Sensor Manufacturer
+                            th Model
+                            th Description
+                            block sensorSettingsCustomTableHeaders
+                            th
+                    tbody
+                        tr(data-ng-repeat='item in items')
+                            td {{item.manufacturer}}
+                            td {{item.model}}
+                            td {{item.description}}
+                            block sensorSettingsCustomTableData
+                            td
+                                button(type='button', class='btn btn-link btn-xs', data-ng-click="selectItem(item)", data-toggle='modal', data-target='#changeSettings') Change
+
+
+        div(class='modal fade', id='changeGeneralSettings', role='dialog')
+            div(class='modal-dialog')
+                div(class='modal-content')
+                    div(class='modal-header')
+                        button(type='button', class='close', data-dismiss='modal') &times
+                        h3 Change General Settings
+                    div(class='modal-body')
+                        div(class='form-horizontal')
+                            block generalSettingsEdit
+                    div(class='modal-footer')
+                        button(type='button', class='btn btn-primary', data-dismiss='modal', data-ng-click='saveGeneral()') Save
+                        button(type='button', class='btn btn-default', data-dismiss='modal') Close
+
+
+        div(class='modal fade', id='changeSettings', role='dialog')
+            div(class='modal-dialog')
+                div(class='modal-content')
+                    div(class='modal-header')
+                        button(type='button', class='close', data-dismiss='modal') &times
+                        h3 Change Sensor Settings
+                    div(class='modal-body')
+                        div(class='form-horizontal')
+                            div(class='form-group')
+                                label(class='control-label col-xs-4', for='manufacturer') Sensor Manufacturer:
+                                div(class='col-xs-8')
+                                    input(type='text', class='form-control', readonly, id='manufacturer', value='{{selectedItem.manufacturer}}')
+                            div(class='form-group')
+                                label(class='control-label col-xs-4', for='model') Model:
+                                div(class='col-xs-8')
+                                    input(type='text', class='form-control', readonly, id='model', value='{{selectedItem.model}}')
+                            div(class='form-group')
+                                label(class='control-label col-xs-4', for='description') Description:
+                                div(class='col-xs-8')
+                                    input(type='text', class='form-control', readonly, id='description', value='{{selectedItem.description}}')
+                            block sensorSettingsCustomSensorEditData
+                    div(class='modal-footer')
+                        button(type='button', class='btn btn-primary', data-dismiss='modal', data-ng-click='saveSensor()') Save
+                        button(type='button', class='btn btn-default', data-dismiss='modal') Close

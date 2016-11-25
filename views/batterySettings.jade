@@ -1,0 +1,53 @@
+extends ./settings
+
+block customVars
+    - var appName = 'IoT Battery Notifications'
+    - var ngApp = 'batteryNotificationIoT'
+
+append scripts
+    script(src='/controllers/batteryService.js')
+    script(src='/controllers/settings.js')
+
+block generalSettings
+    dt Sensor Timeout:
+    dd {{generalSettings.sensorTimeout}} days
+    dt Sensor Obsolete:
+    dd {{generalSettings.sensorObsolete}} days
+
+block generalSettingsEdit
+    div(class='form-group')
+        label(class='control-label col-xs-4', for='sensorTimeout') Sensor Timeout:
+        div(class='col-xs-4')
+            input(type='number', class='form-control', id='sensorTimeout', step='1', min='0', data-ng-model='generalSettings.sensorTimeout_edit')
+    div(class='form-group')
+        label(class='control-label col-xs-4', for='sensorObsolete') Sensor Obsolete:
+        div(class='col-xs-4')
+            input(type='number', class='form-control', id='sensorObsolete', step='1', min='0', data-ng-model='generalSettings.sensorObsolete_edit')
+
+block sensorSettingsCustomTableHeaders
+    th Battery
+    th Voltage Range
+    th Warning On
+    th Alarm On
+
+block sensorSettingsCustomTableData
+    td {{item.battery || item.batteryType}}
+    td {{item.voltageMin + ' - ' + item.voltageMax}}
+    td {{item.batteryWarningLevel || '-'}}
+    td {{item.batteryAlarmLevel || '-'}}
+
+block sensorSettingsCustomSensorEditData
+    div(class='form-group')
+        label(class='control-label col-xs-4', for='voltage') Voltage Range:
+        div(class='col-xs-4')
+            input(type='text', class='form-control', readonly, id='voltage', value='{{selectedItem.voltageMin + " - " + selectedItem.voltageMax}}')
+    div(class='form-group')
+        label(class='control-label col-xs-4', for='batteryWarningLevel') Warn On:
+        div(class='col-xs-4')
+            input(type='number', class='form-control', id='batteryWarningLevel', step='0.1', min='{{selectedItem.voltageMin}}', max='{{selectedItem.voltageMax}}', data-ng-model='selectedItem.batteryWarningLevel')
+    div(class='form-group')
+        label(class='control-label col-xs-4', for='batteryAlarmLevel') Alarm On:
+        div(class='col-xs-4')
+            input(type='number', class='form-control', id='batteryAlarmLevel', step='0.1', min='{{selectedItem.voltageMin}}', max='{{selectedItem.voltageMax}}', data-ng-model='selectedItem.batteryAlarmLevel')
+
+

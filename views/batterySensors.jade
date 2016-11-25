@@ -1,0 +1,41 @@
+mixin customTableHeaders()
+    th Battery
+    th Battery Voltage
+
+mixin customTableData()
+    td {{item.battery || item.batteryType}}
+    td {{(item.batteryVoltage / 1000) || '-'}}
+
+mixin panelFooter(items)
+    text
+        | Used Batteries -&nbsp;
+        label(data-ng-repeat-start='batteryStatistics in #{items}[group.name].sensorsSummary') {{batteryStatistics.type}}
+        text {{': ' + batteryStatistics.count}}
+        text(data-ng-repeat-end) {{$last ? '' : ',&nbsp;'}}
+        label(ng-if='#{items}[group.name].sensorsSummary.length === 0') no battery to replace.
+
+
+extends ./sensors
+
+
+block customVars
+    - var appName = 'IoT Battery Notifications'
+    - var ngApp = 'batteryNotificationIoT'
+
+append scripts
+    script(src='/controllers/batteryService.js')
+    script(src='/controllers/sensors.js')
+
+block selectedSensorsFooter
+    text(class='pull-left', ng-show='selectedSensors.length > 0')
+        | Used Batteries -&nbsp;
+        label(data-ng-repeat-start='batteryStatistics in selectedSensors.sensorsSummary') {{batteryStatistics.type}}
+        text {{': ' + batteryStatistics.count}}
+        text(data-ng-repeat-end) {{$last ? '' : ',&nbsp;'}}
+        label(ng-if='selectedSensors.sensorsSummary.length === 0') no battery to replace.
+
+block printablePanelFooter
+    h4 Used Batteries
+    div(style='margin-left:15px')
+        div(data-ng-repeat='batteryStatistics in selectedSensors.sensorsSummary')
+            | {{batteryStatistics.type + ': ' + batteryStatistics.count}}

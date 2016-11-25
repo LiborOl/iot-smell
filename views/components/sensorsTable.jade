@@ -1,0 +1,43 @@
+mixin sensorsTable(items, inDialog, itemsFilter, showRemoveButton, isPrint)
+    - var repeatString = itemsFilter ? 'item in ' + items + ' | ' + itemsFilter : 'item in ' + items
+    table(class='table table-striped')&attributes(attributes)
+        thead
+            tr
+                if !isPrint
+                    th
+                        if !showRemoveButton
+                            input(type='checkbox', ng-model='#{items}.allSelected', ng-click='selectAll(#{items})')
+                th devEUI
+                th Model
+                th Vendor
+                if !inDialog
+                    th Description
+                th ProjectId
+
+                +customTableHeaders()
+                if !isPrint
+                    th Last Message
+                if !inDialog && !isPrint
+                    th Nearby Sensors
+        tbody
+            tr(ng-repeat=repeatString)
+                if !isPrint
+                    td
+                        if showRemoveButton
+                            button(type='button', class='btn btn-link btn-xs', ng-click='removeFromSelected(item)') Remove
+                        else
+                            input(type='checkbox', ng-model='item.selected', ng-change='sensorSelectedChange()')
+
+                td {{item.devEUI}}
+                td {{item.model}}
+                td {{item.vendor}}
+                if !inDialog
+                    td {{item.description}}
+                td {{item.projectId}}
+                +customTableData()
+                if !isPrint
+                    td(class='text-nowrap') {{item.createdAt | date:'medium'}}
+                if !inDialog && !isPrint
+                    td
+                        button(type='button', class='btn btn-link btn-xs', ng-click='selectNearbyItem(item)', data-toggle='modal', data-target='#nearbyItems', ng-disabled='item.nearbyItems | bnNearbyIsNone:show:projects:item' title='{{item.nearbyItems | bnNearbyTooltip:show}}')
+                            | {{item.nearbyItems | bnNearbyCounts:show:projects:item}}

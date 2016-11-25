@@ -1,0 +1,33 @@
+{
+  "name": "batteryNotificationIoT",
+  "version": "1.0.0",
+  "description": "Application detecting battery low battery leves in IoT sensors.",
+  "private": true,
+  "author": "Libor Olsak",
+  "license": "GNU GPL",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "engines": {
+    "node": "4.6.1"
+  },
+  "keywords": [
+    "iot",
+    "battery",
+    "sensors"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-cookies": "^1.5.8",
+    "body-parser": "~1.15.1",
+    "bootstrap": "^3.3.7",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "express-controller": "^0.2.9",
+    "fs": "0.0.1-security",
+    "jade": "~1.11.0",
+    "jquery": "^3.1.1",
+    "morgan": "~1.7.0",
+    "request": "^2.75.0"
+  }
+}

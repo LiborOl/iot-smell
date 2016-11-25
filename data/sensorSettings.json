@@ -1,0 +1,7 @@
+{
+  "general": {
+    "sensorTimeout": 3456000000,
+    "sensorObsolete": 4320000000
+  },
+  "sensors": []
+}
