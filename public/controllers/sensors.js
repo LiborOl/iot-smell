@@ -39,6 +39,8 @@ function initMap() {
             center: uluru
         });
 
+        var openedInfoWindow = null;
+
         data.forEach(function (dato) {
             if (dato.lat && dato.lng) {
                 var marker = new google.maps.Marker({
@@ -61,7 +63,11 @@ function initMap() {
                 });
 
                 marker.addListener('click', function() {
+                    if (openedInfoWindow) {
+                        openedInfoWindow.close();
+                    }
                     infowindow.open(map, marker);
+                    openedInfoWindow = infowindow;
                 });
             } else {
                 console.error('Unknown location for sensor devEUI: ' + dato.devEUI);

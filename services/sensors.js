@@ -272,8 +272,6 @@
             console.log('Humidity: ' + humidity);
             device.humidity = humidity;
         }
-
-
     }
 
     module.exports = {
