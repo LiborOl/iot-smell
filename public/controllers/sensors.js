@@ -47,6 +47,19 @@ function initMap() {
                     icon: getCircle(dato.quality),
                     title: getTitle(dato)
                 });
+                var infowindow = new google.maps.InfoWindow({
+                    content: '<dl>' +
+                    '<dt>devEUI:</dt>' +
+                    '<dd>' + dato.devEUI + '</dd>' +
+                    '<dt>quality:</dt>' +
+                    '<dd>' + (dato.quality) + '</dd>' +
+                    '<dt>Temperature:</dt>' +
+                    '<dd>' + (dato.temperature / 10) + '</dd>' +
+                    '<dt>Humidity:</dt>' +
+                    '<dd>' + (dato.humidity / 10) + '</dd>' +
+                    '</dl>'
+                });
+
                 marker.addListener('click', function() {
                     infowindow.open(map, marker);
                 });
@@ -55,9 +68,6 @@ function initMap() {
             }
         });
 
-        var infowindow = new google.maps.InfoWindow({
-            content: 'aaaaa'
-        });
     }
 
     function getTitle(dato) {

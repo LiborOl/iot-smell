@@ -254,13 +254,19 @@
                     });
                     allDevices.push.apply(allDevices, devices);
                 }
-            })
+            });
 
         function addCustomSensorData(device, message){
             var payload = message['payloadHex'];
             var quality = parseInt(payload.substr(0, 4), 16);
             console.log('Quality: ' + quality);
             device.quality = quality;
+            var temperature = parseInt(payload.substr(4, 4), 16);
+            console.log('Temperature: ' + temperature);
+            device.temperature = temperature;
+            var humidity = parseInt(payload.substr(8, 4), 16);
+            console.log('Humidity: ' + humidity);
+            device.humidity = humidity;
         }
 
 
