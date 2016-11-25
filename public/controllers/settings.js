@@ -32,6 +32,18 @@
                 })
         };
 
+        $scope.setLocation = function () {
+            var processLocation = function(location) {
+                $scope.selectedItem.latitude = location.coords.latitude;
+                $scope.selectedItem.longitude = location.coords.longitude;
+                $scope.$apply();
+            }
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(processLocation);
+            }
+        }
+
         init();
         getSettings();
 
