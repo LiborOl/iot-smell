@@ -10,8 +10,12 @@
 
         }
 
-        function setDataLoadedNG() {
+        function setDataLoadedNG(data) {
             $scope.dataLoaded = true;
+            var worst = data.sort(function(a, b){
+                return b.quality - a.quality
+            });
+            $scope.worst = worst.slice(0, 5);
             $scope.$apply();
         }
 
@@ -84,7 +88,7 @@ function initMap() {
         });
 
         console.log('loading done');
-        setDataLoaded();
+        setDataLoaded(data);
     }
 
     function getTitle(dato) {

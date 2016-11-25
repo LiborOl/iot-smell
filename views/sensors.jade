@@ -8,7 +8,24 @@ block content
     div(data-ng-controller='sensors')
         div(ng-show='!dataLoaded')
             h2 Loading data...
-        div(ng-cloak, ng-show='dataLoaded')#map
+        div(ng-cloak, ng-show='dataLoaded')
+            div#map
+            br
+            div(class='panel panel-default')
+                div(class='panel-body')
+                    span
+                        h3 Worst sensors
+                    table(class='table table-striped')
+                        tr
+                            th devEUI
+                            th Quality
+                            th Temperature
+                            th Humidity
+                        tr(ng-repeat='item in worst')
+                            td {{item.devEUI}}
+                            td {{item.quality}}
+                            td {{item.temperature}}
+                            td {{item.humidity}}
         script.
             function initMapXX() {
                 var uluru = {lat: -25.363, lng: 131.044};
