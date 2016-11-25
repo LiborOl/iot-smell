@@ -1,5 +1,5 @@
 {
-  "url": "https://api.pripoj.me",
+  "url": "https://pripojme-proxy.appspot.com/api",
   "token": "wlKtjZvSKdW6cggcEynAFcSROu8fURCS",
   "proxy": null,
   "cache_timeout": 3000000

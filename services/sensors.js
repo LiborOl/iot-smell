@@ -171,18 +171,94 @@
         }
     }
 
-    function readSmell(callback){
+    function readSmellXX(callback) {
         var testData = [
             {devEUI: '767382', lat: 49.7709579, lng: 15.8470745, val: 4.4},
             {devEUI: '767382', lat: 49.9709579, lng: 15.8470745, val: 5.4},
             {devEUI: '767382', lat: 49.8709579, lng: 18.2470745, val: 6.4}
         ];
 
+
         callback(testData);
+    }
+
+    function readSmell(callback) {
+        var configFileName = 'aq-detectors.json';
+        var locations = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', configFileName), 'utf8'));
+        var allMessagesCount = 0;
+        var messagesRead = 0;
+        var allDevices = [];
+
+        var project = { projectId: 'CistyVzduch'};
+        var deviceUrl = getDeviceUrl(project);
+        getPripojMe(deviceUrl)
+            .on('data', function (deviceDataString) {
+                var devices = getRecords(deviceDataString);
+                if (devices) {
+                    allMessagesCount += devices.length;
+                    devices.forEach(function (device) {
+                        var location = locations[device.devEUI];
+                        if (location) {
+                            device.lat = location.latitude;
+                            device.lng = location.longitude;
+                        }
+                        var messageUrl = getMessageUrl(device);
+                        getPripojMe(messageUrl)
+                            .on('data', function (messageDataString) {
+                                messagesRead++;
+                                var messages = getRecords(messageDataString);
+                                if (messages && messages.length >= 1) {
+                                    var message = messages[0];
+
+                                    var lrrs = message['lrrs'];
+                                    if (lrrs) {
+                                        device.lrrIds = message['lrrs'].map(
+                                            function (lrr) {
+                                                return lrr['Lrrid']
+                                            }
+                                        )
+                                    }
+
+                                    device.createdAt = message['createdAt'];
+
+                                    addCustomSensorData(device, message)
+                                } else {
+                                    console.error('No Messages');
+                                    return;
+                                }
+                                if (messagesRead === allMessagesCount) {
+                                    var resp =  allDevices;
+                                    //noinspection JSUnresolvedFunction
+                                    if (!fs.existsSync(cacheFolder)) {
+                                        //noinspection JSUnresolvedFunction
+                                        fs.mkdirSync(cacheFolder);
+                                    }
+                                    //noinspection JSUnresolvedFunction
+                                    fs.writeFile(cacheFilePath, JSON.stringify(resp, null, 2), 'utf8');
+                                    console.log('Returning data from IoT server.');
+                                    callback(resp);
+                                }
+                            })
+                    });
+                    allDevices.push.apply(allDevices, devices);
+                }
+            })
+
+        function addCustomSensorData(device, message){
+            //TODO
+            console.error('!!! addCustomSensorData not implemented yet');
+            var payload = message['payloadHex'];
+            var quality = parseInt(payload.substr(0, 4), 16);
+            console.log('Quality: ' + quality);
+            device.quality = quality;
+        }
+
+
     }
 
     module.exports = {
         readSensorsData: readSensorsData,
         readSmell: readSmell
     };
-})();
+})
+();

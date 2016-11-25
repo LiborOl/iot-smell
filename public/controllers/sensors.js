@@ -1,5 +1,4 @@
 (function () {
-    //noinspection JSUnresolvedFunction
     var app = angular.module('batteryNotificationIoT');
 
     app.controller('sensors', ['$scope', '$http', '$cookies', 'batteryService', function ($scope, $http, $cookies, batteryService) {
@@ -10,8 +9,6 @@
         }
 
     }])
-
-
 })();
 
 
@@ -32,7 +29,6 @@ function initMap() {
     console.log('Init Map');
 
     $.get('/api/smell', function (data) {
-        debugger;
         drawMap(data);
     });
 
@@ -44,26 +40,19 @@ function initMap() {
         });
 
         data.forEach(function (dato) {
-            new google.maps.Marker({
-                position: {lat: dato.lat, lng: dato.lng},
-                map: map,
-                icon: getCircle(dato.val)
-            })
-        })
-        // var marker = new google.maps.Marker({
-        //     position: uluru,
-        //     map: map,
-        //     icon: getCircle(4.4)
-        // });
-
-        map.data.setStyle(function (feature) {
-            debugger;
-            var magnitude = feature.getProperty('mag');
-            return {
-                icon: getCircle(magnitude)
-            };
+            if (dato.lat && dato.lng) {
+                new google.maps.Marker({
+                    position: {lat: dato.lat, lng: dato.lng},
+                    map: map,
+                    icon: getCircle(qualityToMagnitude(dato.quality))
+                })
+            } else {
+                console.error('Unknown location for sensor devEUI: ' + dato.devEUI);
+            }
         });
     }
 
-    console.log('Map initialized');
+    function qualityToMagnitude(quality) {
+        return quality / 10000;
+    }
 }

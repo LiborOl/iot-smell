@@ -119,7 +119,7 @@
         }
 
         return {
-            appName: 'Čistý vzduch',
+            appName: 'Čistý Vzduch',
             groups: groups,
             sensorsSummary: sensorsSummary,
             selectedByDefault: selectedByDefault,
