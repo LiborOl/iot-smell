@@ -17,8 +17,8 @@ block content
                             th Longitude
                             th
                     tbody
-                        tr(data-ng-repeat='item in items')
-                            td {{item.id}}
+                        tr(data-ng-repeat='(key, item) in items')
+                            td {{key}}
                             td {{item.latitude}}
                             td {{item.longitude}}
                             td
