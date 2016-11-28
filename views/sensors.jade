@@ -21,11 +21,13 @@ block content
                             th Quality
                             th Temperature
                             th Humidity
+                            th Last Message
                         tr(ng-repeat='item in worst')
                             td {{item.devEUI}}
                             td {{item.quality}}
                             td {{item.temperature / 10}}°C
                             td {{item.humidity / 10}}%
+                            td {{item.createdAt | date:'medium'}}
 
 
         script(async, defer, ng-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7hQ85LSM_AQzXrUZprQkbZAaX6qJc-dQ&libraries=visualization&callback=initMap")

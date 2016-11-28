@@ -72,6 +72,8 @@ function initMap() {
                     '<dd>' + (dato.temperature / 10) + '°C</dd>' +
                     '<dt>Humidity:</dt>' +
                     '<dd>' + (dato.humidity / 10) + '%</dd>' +
+                    '<dt>Last Message:</dt>' +
+                    '<dd>' + (new Date(dato.createdAt)).toLocaleString() + '</dd>' +
                     '</dl>'
                 });
 
