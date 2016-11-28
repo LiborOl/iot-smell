@@ -1,6 +1,6 @@
 {
   "url": "https://pripojme-proxy.appspot.com/api",
   "token": "wlKtjZvSKdW6cggcEynAFcSROu8fURCS",
-  "proxy": "http://web-proxy.eu.hpecorp.net:8080",
+  "proxy": null,
   "cache_timeout": 3000000
 }
