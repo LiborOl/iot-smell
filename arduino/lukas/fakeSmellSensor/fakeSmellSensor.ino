@@ -1,4 +1,5 @@
 #include <SoftwareSerial.h>
+#include <stdlib.h>
 
 SoftwareSerial loraSerial(10, 11); // RX, TX
 
@@ -9,12 +10,8 @@ void setup() {
   pinMode(redLedPin, OUTPUT); //red led out
   pinMode(greenLedPin, OUTPUT); //green led out
 
-  //signal that it is not initialized
-  digitalWrite(redLedPin, HIGH); //light the red led
-  digitalWrite(greenLedPin, LOW); //light the red led
-  
   randomSeed(analogRead(0));
-  
+
   // start serial port at 57600 bps and wait for port to open:
   Serial.begin(57600);
   while (!Serial) {
@@ -23,60 +20,48 @@ void setup() {
 
   loraSerial.begin(57600);
 
-  //join the LoRa
   establishLora();
-
-  digitalWrite(redLedPin, LOW); //light the red led
-  digitalWrite(greenLedPin, HIGH); //light the red led
 }
 
 void loop() {
+  int loraStatus = getStatus() & 0x0f;
+  if (loraStatus == 0) { //not joined
+    establishLora(); //establish the connection
+  } else if (loraStatus > 1) { //busy
+    // light up both diodes
+    digitalWrite(redLedPin, HIGH); //light the red led
+    digitalWrite(greenLedPin, HIGH); //light the red led
+    delay(20000);
+    return;
+  }
+
+  //LoRa is ready to transmit, lets do that
+  
   int airPollution = 120 + (random(100) - 50); // 120 +- 50
   float temperature = 28.65 + (random(20) - 10); // 28.65 +- 10
-  float humidity = 500 + random(300); // 500 - 800
+  float humidity = 45.1 + (random(20) - 10); // 45.1 +- 10
   int battery = 0x80ff + (random(100) - 50); // +- 50
 
   //Transform the data into HEXa String
   String data = getData(airPollution, temperature, humidity, battery);
+  send(data);
 
-  //Send
-  Serial.print("mac tx cnf 42 "+ data + "\r\n");
-  loraSerial.print("mac tx cnf 42 "+ data + "\r\n");
-
-  //Verify send transaction
-  String resp = readLoraString();
-  if (resp.startsWith("ok")) {
-    loraSerial.setTimeout(30000);
-    String resp2 = readLoraString();
-    loraSerial.setTimeout(2000);
-    if (resp.startsWith("mac_tx_ok")) {
-      //OK
-    } else {
-      Serial.print("Send received "+ resp2);
-    }
-  } else {
-    Serial.print("Send did not ended with OK.");
-  }
-
-  clearLoraSerial();
-
-  delay(30000);
+  delay(30000); //wait for 30 seconds to the next round.
 }
 
 void send(String msg) {
   Serial.print("mac tx cnf 42 "+ msg + "\r\n");
+  clearLoraSerial();
   loraSerial.print("mac tx cnf 42 "+ msg + "\r\n");
 
   //Verify send transaction
   String resp = readLoraString();
   if (resp.startsWith("ok")) {
-    loraSerial.setTimeout(30000);
+    loraSerial.setTimeout(30000); // Send of the packet takes some time...
     String resp2 = readLoraString();
-    loraSerial.setTimeout(2000);
-    if (resp.startsWith("mac_tx_ok")) {
-      //OK
-    } else if (resp.startsWith("mac_rx")) {
-      //OK
+    loraSerial.setTimeout(2000); // Set the timeout back
+    if (resp2.startsWith("mac_tx_ok") || resp2.startsWith("mac_rx")) {
+      Serial.print("Received the ack"); //OK
     } else {
       Serial.print("Send received "+ resp2);
     }
@@ -96,16 +81,6 @@ String getData(int airPollution, float temperature, float humidity, int battery)
   String humidityStr = dec2Hex(humidityInt);
   String batteryStr = dec2Hex(battery);
   
-  //Serial.print("Pollution: ");
-  //Serial.print(airPollution);
-  //Serial.print("; ");
-  //Serial.print("Temperature: ");
-  //Serial.print(temperature);
-  //Serial.print("; ");
-  //Serial.print("Humidity: ");
-  //Serial.print(humidity);
-  //Serial.print("; ");
-  
   return airPollutionStr + temperatureStr + humidityStr + batteryStr;
 }
 
@@ -120,7 +95,12 @@ String dec2Hex(int num) {
 }
 
 boolean establishLora() {
+  //signal that it is not initialized
+  digitalWrite(redLedPin, HIGH); //light the red led
+  digitalWrite(greenLedPin, HIGH); //light the red led
+  
   clearLoraSerial();
+  delay(1000);
   
   loraSerial.print("mac join abp\r\n");
   Serial.print("mac join abp\r\n");
@@ -131,8 +111,10 @@ boolean establishLora() {
   clearLoraSerial();
 
   if (resp.startsWith("accepted")) {
+    digitalWrite(redLedPin, LOW); //light the red led
     return true;
   } else {
+    digitalWrite(greenLedPin, LOW); //light the red led
     return false;
   }
 }
@@ -151,10 +133,21 @@ String readLoraString() {
 
   
   if (! data.endsWith("\r")) {
-    Serial.println("ERROR");
+    Serial.println("ERROR, the string [" + data + "] did not contain the \\r\\n at the end.");
+    return data;
   }
 
-  //clearLoraSerial();
   return data.substring(0, data.length() - 1);
+}
+
+int getStatus() {
+  Serial.println("Getting the LoRa module status");
+  clearLoraSerial();
+  loraSerial.print("mac get status\r\n");
+  String data = readLoraString();
+  long res = strtol(data.c_str(), 0, 16);
+  Serial.println("LoRa status: "+ data);
+  clearLoraSerial();
+  return res;
 }
 
