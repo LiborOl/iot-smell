@@ -3,7 +3,6 @@
 // Battery voltage sensing (mV) - the divider callibrated to get millivolts = ADC_output * 4 (0..4092 mV range)
 // No tamper detection logic yet
 // RN2483 minimal library
-// Refactored, untested!
 
 #include "DHT.h"
 #include "rn2483.h"
