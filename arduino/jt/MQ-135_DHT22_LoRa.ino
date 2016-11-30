@@ -9,6 +9,8 @@
 #include "rn2483.h"
 #include <SoftwareSerial.h>
 
+#define TX_RETRY_COUNT 3// LoRa transmit retries when confirmed tx fails
+
 #define APPS_KEY "DEADBEEF000000000000000000000001"
 #define NWKS_KEY "DEADBEEF000000000000000000000000"
 
@@ -55,19 +57,28 @@ void setup() {
 
 
 void initializeRadio() {
+  Serial.begin(57600);
+  Serial.println("Boot...");
+
   loraSerial.begin(57600);
+  Serial.print("LoRa RESET: ");
   myLora.reset();
+  Serial.println("OK");
   String addr = myLora.hweui(); // TODO: "sys get hweui" or "mac get deveui" ?
+  Serial.println("Got HWEUI: " + addr);
   myLora.setupABP(addr.substring(8), APPS_KEY, NWKS_KEY);
+  Serial.print("ABP setup+join:");
   
   bool joinResult = myLora.join(); 
   while(!joinResult) {
+    Serial.print(" ERR");
     digitalWrite(ERR_LED, HIGH); 
     delay(5000); //delay before retry
     joinResult = myLora.join();
     digitalWrite(ERR_LED, LOW); 
   }
   digitalWrite(LORA_OK_LED, HIGH);   
+  Serial.println(" OK");
 }
 
 
@@ -75,7 +86,7 @@ void loop() {
   // start heating the AQ meter
   digitalWrite(AQ_PWR_PIN, LOW); 
   Serial.println("Sensor heating...");
-  delay(40000);  // TODO: Sleep both Arduino and LoRa module
+  delay(60000);  // TODO: Sleep both Arduino and LoRa module
   
   // reading temperature or humidity takes about 250 milliseconds
   float h = dht.readHumidity();
@@ -96,12 +107,17 @@ void loop() {
   // Send data over LoRa
   digitalWrite(LORA_OK_LED, HIGH);
   String out = getData(aQValue, t, h, batteryVoltage);
-  Serial.println("Sending: "+out);   
-  myLora.txUncnf(out);
+  Serial.print("Sending: "+out+ " ");   
+  for (int i = 0; i < TX_RETRY_COUNT; i++) {
+    bool res = myLora.txCnf(out);
+    digitalWrite(ERR_LED, res ? LOW : HIGH); 
+    Serial.print(res ? "OK\n" : "ERR ");
+    if (res) break;
+  }  
   digitalWrite(LORA_OK_LED, LOW);
 
   // sleep until next measurement
-  delay(120000); // TODO: Sleep both Arduino and LoRa module                      
+  delay(600000); // TODO: Sleep both Arduino and LoRa module                      
 }
 
 

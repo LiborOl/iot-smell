@@ -47,7 +47,6 @@ String rn2483::hweui() {
 
 bool rn2483::join() {
   if(_otaa) {
-    reset();   
     _serial.setTimeout(SAVE_TIMEOUT);
     
     bool joined = false;
@@ -66,7 +65,6 @@ bool rn2483::join() {
     _serial.setTimeout(RESP_TIMEOUT);
     return joined;      
   } else if (_abp) {
-    reset();
     _serial.setTimeout(SAVE_TIMEOUT);
     
     _serial.print("mac join abp" NEWLINE);
@@ -79,6 +77,7 @@ bool rn2483::join() {
 }
 
 void rn2483::reset() {
+  delay(100);
   flushInput();
   _serial.print("mac reset 868" NEWLINE);
   readResponse();
@@ -219,7 +218,7 @@ void rn2483::flushInput() {
 }
 
 String rn2483::readResponse() {
-  return readResponse();
+  return _serial.readStringUntil('\n');
 }
 
 
