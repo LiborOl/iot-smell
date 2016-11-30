@@ -116,7 +116,7 @@ void loop() {
   digitalWrite(LORA_OK_LED, LOW);
 
   // sleep until next measurement
-  delay(600000); // TODO: Sleep both Arduino and LoRa module                      
+  delay(540000); // TODO: Sleep both Arduino and LoRa module                      
 }
 
 

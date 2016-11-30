@@ -127,7 +127,7 @@ void rn2483::setupABP(String devAddr, String appSKey, String nwkSKey) {
   readResponse();
   _serial.print("mac set pwridx 1" NEWLINE);  
   readResponse();
-  _serial.print("mac set dr 5" NEWLINE); 
+  _serial.print("mac set dr 2" NEWLINE); 
   readResponse();
 
   _serial.setTimeout(SAVE_TIMEOUT);
@@ -161,7 +161,7 @@ bool rn2483::txCmd(String command, String data) {
       _serial.setTimeout(TX_TIMEOUT);
       resp = readResponse();
       _serial.setTimeout(RESP_TIMEOUT);
-
+        Serial.print(resp);
       if(resp.startsWith("mac_tx_ok") || resp.startsWith("radio_tx_ok")) {
         return true;
       } else if (resp.startsWith("mac_rx")) {
