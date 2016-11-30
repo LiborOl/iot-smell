@@ -3,12 +3,13 @@
 
 SoftwareSerial loraSerial(10, 11); // RX, TX
 
-int redLedPin = 13;
+int redLedPin = 4;
 int greenLedPin = 3;
 
 void setup() {
   pinMode(redLedPin, OUTPUT); //red led out
   pinMode(greenLedPin, OUTPUT); //green led out
+  pinMode(LED_BUILTIN, OUTPUT);
 
   randomSeed(analogRead(0));
 
@@ -27,8 +28,10 @@ void loop() {
   int loraStatus = getStatus() & 0x0f;
   if (loraStatus == 0) { //not joined
     establishLora(); //establish the connection
-  } else if (loraStatus > 1) { //busy
-    // light up both diodes
+  } else if (loraStatus == 1) { //Ready, Set the state like it is fine...  
+    digitalWrite(redLedPin, LOW); //light the red led
+    digitalWrite(greenLedPin, HIGH); //light the red led
+  } else if (loraStatus > 1) { //busy, light up both diodes
     digitalWrite(redLedPin, HIGH); //light the red led
     digitalWrite(greenLedPin, HIGH); //light the red led
     delay(20000);
@@ -46,10 +49,16 @@ void loop() {
   String data = getData(airPollution, temperature, humidity, battery);
   send(data);
 
-  delay(30000); //wait for 30 seconds to the next round.
+  delay(60000); //wait for 30 seconds to the next round.
+}
+
+void transmitBlinkLoop() {
+  
 }
 
 void send(String msg) {
+  blick(LED_BUILTIN, HIGH, 20, 35);
+  
   Serial.print("mac tx cnf 42 "+ msg + "\r\n");
   clearLoraSerial();
   loraSerial.print("mac tx cnf 42 "+ msg + "\r\n");
@@ -69,7 +78,21 @@ void send(String msg) {
     Serial.print("Send did not ended with OK.");
   }
 
+  blick(LED_BUILTIN, LOW, 2, 50);
+
   clearLoraSerial();
+}
+
+void blick(int pin, int endState, int count, int delayMs) {
+  for (int i = 0; i < count; i++) {
+    if (i % 2 == 0) {
+      digitalWrite(pin, HIGH);
+    } else {
+      digitalWrite(pin, LOW);
+    }
+    delay(delayMs);
+  }
+  digitalWrite(pin, endState);
 }
 
 String getData(int airPollution, float temperature, float humidity, int battery) {
